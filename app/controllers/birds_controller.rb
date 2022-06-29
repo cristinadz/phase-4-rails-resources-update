@@ -1,4 +1,5 @@
 class BirdsController < ApplicationController
+  wrap_parameters format: []
 
   # GET /birds
   def index
@@ -11,6 +12,30 @@ class BirdsController < ApplicationController
     bird = Bird.create(bird_params)
     render json: bird, status: :created
   end
+
+    # PATCH birds/:id
+
+    def increment_likes
+      
+      bird = Bird.find_by(id: params[:id])
+      if bird
+        bird.update( likes: bird.likes + params[:likes])
+        render json: bird
+
+      else 
+        render json: { error: "Bird not found" }, status: :not_found
+      end
+    end 
+
+    # def update
+    #   bird = Bird.find_by(id: params[:id])
+    #   if bird 
+    #     bird.update(bird_params)
+    #     render json: bird
+    #   else
+    #     render json: { error: "Bird not found" }, status: :not_found
+    #   end 
+    # end
 
   # GET /birds/:id
   def show
@@ -27,5 +52,6 @@ class BirdsController < ApplicationController
   def bird_params
     params.permit(:name, :species)
   end
+
 
 end
